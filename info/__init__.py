@@ -10,10 +10,11 @@ from redis import StrictRedis
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from config import config
-from config import DevelopmentConfig,ProductionConfig
+from config import DevelopmentConfig, ProductionConfig
 
 db = SQLAlchemy()
-redis_store= None
+redis_store = None
+
 
 def creat_app(config_name='development'):
     setup_log(config_name)
