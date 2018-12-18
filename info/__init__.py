@@ -23,8 +23,17 @@ def creat_app(config_name='development'):
     db.init_app(app)
     global redis_store
     redis_store = StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
+    # 添加到session
     Session(app)
-    CSRFProtect(app)
+    # 添加CSRF验证
+    # CSRFProtect(app)
+    # 注册蓝图
+    from info.modules.index import index_blu
+    app.register_blueprint(index_blu)
+
+    from info.modules.passport import passport_blu
+    app.register_blueprint(passport_blu)
+
     return app
 
 

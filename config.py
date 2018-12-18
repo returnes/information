@@ -11,7 +11,7 @@ class Config(object):
     # DEBUG=True
     LOG_LEVEL = logging.DEBUG
     # mysql 配置
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:000000@127.0.0.1:3306/news'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:000000@127.0.0.1:3306/news'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     # redis 配置信息

@@ -2,10 +2,11 @@
 # -*- coding: UTF-8 -*-
 # author:caozy time:18-12-16
 
+from flask import current_app
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from info import creat_app, db
-from flask import current_app
+from info import models
 
 # 用Manager类管理app
 app = creat_app()
@@ -16,12 +17,12 @@ Migrate(app=app, db=db)
 manager.add_command('db', MigrateCommand)
 
 
-@app.route('/')
-def index():
-    current_app.logger.debug('debug')
-    current_app.logger.error('error')
-    return "hello"
-
+# @app.route('/')
+# def index():
+#     current_app.logger.debug('debug')
+#     current_app.logger.error('error')
+#     return "hello"
+#
 
 if __name__ == '__main__':
     # app.run()

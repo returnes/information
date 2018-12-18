@@ -23,4 +23,8 @@ def index():
     return 'ok'
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
+    import random
+    base_code = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    sms_code = ''.join(random.sample(base_code, 6))
+    print(sms_code)
