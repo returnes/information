@@ -12,7 +12,7 @@ app = creat_app()
 manager = Manager(app)
 # 迁移app和db
 Migrate(app=app, db=db)
-# 将迁移指令添加到Manager类中
+# 将迁移指令db添加到Manager类中
 manager.add_command('db', MigrateCommand)
 
 

@@ -20,7 +20,7 @@ class Config(object):
     # session 配置
     SESSION_TYPE = 'redis'
     SESSION_USE_SIGNER = True
-    SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
+    SESSION_REDIS = StrictRedis(host=REDIS_HOST, port=REDIS_PORT,db=1)
     PERMANENT_SESSION_LIFETIME = 3600
     SECRET_KEY = 'KZtgoZECnZyp/hiU49YHotf2Nv4IGYqF5I7M6K3iClzvTWYtALha9E2i7wgIK78X'
 
