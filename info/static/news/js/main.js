@@ -110,6 +110,27 @@ $(function(){
         }
 
         // 发起登录请求
+        var params={
+            'mobile':mobile,
+            'password':password
+        }
+
+        $.ajax({
+            url:'passport/login',
+            type:'post',
+            contentType:'application/json',
+            dataType:'json',
+            headers:{'X-CSRFToken':getCookie("csrf_token")},
+            data:JSON.stringify(params),
+            success:function (data) {
+                if (data.errno=='0'){
+                    location.reload()
+                }else {
+                    $("#login-password-err").html(resp.errmsg)
+                    $("#login-password-err").show()
+                }
+            }
+        })
     })
 
 
@@ -144,6 +165,28 @@ $(function(){
         }
 
         // 发起注册请求
+        var params={
+            'mobile':mobile,
+            'sms_code':smscode,
+            'password':password
+        }
+        $.ajax({
+            url:'/passport/register',
+            type:'post',
+            contentType:'application/json',
+            dataType:'json',
+            headers:{'X-CSRFToken':getCookie("csrf_token")},
+            data:JSON.stringify(params),
+            success:function (data) {
+                if (data.errno=="0"){
+                    // alert(1)
+                    location.reload()
+                }else {
+                    $("#register-password-err").html(resp.errmsg)
+                    $("#register-password-err").show()
+                }
+            }
+        })
 
     })
 })
@@ -192,6 +235,7 @@ function sendSMSCode() {
         type:'post',
         contentType:'application/json', //告知服务器我们传递是json
         dataType:'json',
+        headers:{'X-CSRFToken':getCookie("csrf_token")},
         data:JSON.stringify(params),    // 将字典转换为字符串
         // beforeSend: function (xhr, settings) {
         //     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");

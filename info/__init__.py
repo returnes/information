@@ -4,7 +4,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask
+from flask import Flask, make_response
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_wtf.csrf import CSRFProtect
@@ -23,16 +23,27 @@ def creat_app(config_name='development'):
     db.init_app(app)
     global redis_store
     redis_store = StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
-    # 添加到session
-    Session(app)
     # 添加CSRF验证
     # CSRFProtect(app)
+    # 添加到session
+    Session(app)
+    # 注册自定义过滤器
+    from info.utils.common import do_index_class
+    app.add_template_filter(do_index_class, "index_class")
     # 注册蓝图
     from info.modules.index import index_blu
     app.register_blueprint(index_blu)
 
     from info.modules.passport import passport_blu
     app.register_blueprint(passport_blu)
+
+
+    @app.after_request
+    def after_request(response):
+        from flask_wtf.csrf import generate_csrf
+        csrf_token = generate_csrf()
+        response.set_cookie('csrf_token', csrf_token)
+        return response
 
     return app
 

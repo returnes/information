@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 # author:caozy time:18-12-18
+from datetime import datetime
 
-from flask import request, current_app, jsonify, make_response
+from flask import request, current_app, jsonify, make_response, session, redirect, url_for
 
 from info.models import User
 from info.utils.captcha.captcha import captcha
 from info.modules.passport import passport_blu
-from info import redis_store
+from info import redis_store, db
 from info import constants
 from info.response_code import RET
 from info.lib.yuntongxun.sms import CCP
@@ -54,7 +55,8 @@ def send_sms_code():
         redis_code = redis_store.get('img_' + image_code_id)
         if redis_code:
             redis_code = redis_code.decode()
-            # print(redis_code)
+            # redis 中认证后删除该记录
+            redis_store.delete('img_'+ image_code_id)
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.NODATA, errmsg='redis数据错误')
@@ -69,10 +71,91 @@ def send_sms_code():
     # sms_code = ''.join(random.sample(base_code, 6))
     sms_code = '%06d' % random.randint(0, 999999)
     result=CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES / 60], 1)
-    print(result)
+    current_app.logger.info(sms_code)
     try:
         redis_store.setex('sms_' + mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=RET.DATAERR, errmsg='发送失败')
     return jsonify(errno=RET.OK, errmsg='发送成功')
+
+
+# 注册
+@passport_blu.route('/register',methods=['POST'])
+def register():
+    mobile=request.json.get('mobile')
+    smscode=request.json.get('sms_code')
+    password=request.json.get('password')
+    if not all([mobile,smscode,password]):
+        return jsonify(errno=RET.PARAMERR,errmsg='参数不全')
+    try:
+        redis_sms_code=redis_store.get('sms_'+mobile)
+        if redis_sms_code.decode()==smscode:
+            redis_store.delete('sms'+mobile)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR,errmsg='redis错误')
+    if not redis_sms_code:
+        return jsonify(errno=RET.NODATA, errmsg='验证码过期')
+    if redis_sms_code.decode()!=smscode:
+        return jsonify(errno=RET.DATAERR,errmsg='验证码不一致 ')
+
+    user = User()
+    user.mobile=mobile
+    user.nick_name=mobile
+    user.password=password
+    try:
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(e)
+        db.session.rollback()
+        return jsonify(errno=RET.DBERR,errmsg='数据保存失败')
+    session['user_id']=user.id
+    session['mobile']=mobile
+    session['nick_name']=mobile
+    return jsonify(errno=RET.OK,errmsg='注册成功')
+
+
+# 登录
+@passport_blu.route('/login',methods=['POST'])
+def login():
+    mobile=request.json.get('mobile')
+    password=request.json.get('password')
+
+    if not all([mobile,password]):
+        return jsonify(errno=RET.PARAMERR,errmsg='参数错误')
+    try:
+        user=User.query.filter_by(mobile=mobile).first()
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR,errmsg='数据库错误')
+    if not user:
+        return jsonify(errno=RET.NODATA,errmsg='请先注册')
+    if not user.check_passowrd(password):
+        return jsonify(errno=RET.PWDERR,errmsg='用户名或密码错误')
+    session['user_id']=user.id
+    session['mobile']=mobile
+    session['nick_name']=mobile
+    user.last_login=datetime.now()
+    try:
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(e)
+        db.rollback()
+        return jsonify(errno=RET.DBERR,errmsg='数据错误')
+
+    return jsonify(errno=RET.OK,errmsg='登录成功')
+
+
+@passport_blu.route('/logout/<int:id>')
+def logout(id=None):
+    user_id=session.get('user_id')
+    if id==user_id:
+        # session['user_id']=''
+        # session['mobile']=''
+        # session['nick_name']=''
+        session.pop('user_id', None)
+        session.pop('nick_name', None)
+        session.pop('mobile', None)
+    return redirect(url_for('index.index'))
