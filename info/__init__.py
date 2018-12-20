@@ -4,11 +4,13 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, make_response
+from flask import Flask, make_response, g, session
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
+from sqlalchemy.sql.functions import current_user
+
 from config import config
 from config import DevelopmentConfig, ProductionConfig
 
@@ -37,7 +39,25 @@ def creat_app(config_name='development'):
     from info.modules.passport import passport_blu
     app.register_blueprint(passport_blu)
 
+    from info.modules.news import news_blu
+    app.register_blueprint(news_blu)
 
+    @app.before_request
+    def before_request():
+
+        """pull user info from the database based on session id"""
+
+        g.user = None
+
+        if 'user_id' in session:
+            from info.models import User
+            try:
+                try:
+                    g.user = User.query.get(session['user_id'])
+                except TypeError:  # session probably expired
+                    pass
+            except KeyError:
+                pass
     @app.after_request
     def after_request(response):
         from flask_wtf.csrf import generate_csrf
