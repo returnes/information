@@ -53,8 +53,8 @@ def new_list():
         page = int(page)
         per_page = int(per_page)
     except Exception as e:
-        current_app.logger.error(e)
-        return jsonify(errno=RET.PARAMERR, errmsg='参数错误')
+        page=1
+        per_page=20
     # 3. 查询数据并分页
     filters = []
     # 如果分类id不为1，那么添加分类id的过滤

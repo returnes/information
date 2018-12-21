@@ -152,10 +152,11 @@ def login():
 def logout(id=None):
     user_id=session.get('user_id')
     if id==user_id:
-        # session['user_id']=''
-        # session['mobile']=''
-        # session['nick_name']=''
-        session.pop('user_id', None)
-        session.pop('nick_name', None)
-        session.pop('mobile', None)
+        session['user_id']=''
+        session['mobile']=''
+        session['nick_name']=''
+        # session.pop('user_id', None)
+        # session.pop('nick_name', None)
+        # session.pop('mobile', None)
+        # del session['user_id']
     return redirect(url_for('index.index'))

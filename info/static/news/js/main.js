@@ -116,7 +116,7 @@ $(function(){
         }
 
         $.ajax({
-            url:'passport/login',
+            url:'/passport/login',
             type:'post',
             contentType:'application/json',
             dataType:'json',

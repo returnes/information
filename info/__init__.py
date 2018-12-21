@@ -4,7 +4,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, make_response, g, session
+from flask import Flask, make_response, g, session, render_template
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_wtf.csrf import CSRFProtect
@@ -13,6 +13,7 @@ from sqlalchemy.sql.functions import current_user
 
 from config import config
 from config import DevelopmentConfig, ProductionConfig
+from info.utils.common import user_login_data
 
 db = SQLAlchemy()
 redis_store = None
@@ -42,28 +43,37 @@ def creat_app(config_name='development'):
     from info.modules.news import news_blu
     app.register_blueprint(news_blu)
 
-    @app.before_request
-    def before_request():
+    # @app.before_request
+    # def before_request():
+    #
+    #     """pull user info from the database based on session id"""
+    #
+    #     g.user = None
+    #
+    #     if 'user_id' in session:
+    #         from info.models import User
+    #         try:
+    #             try:
+    #                 g.user = User.query.get(session['user_id'])
+    #             except TypeError:  # session probably expired
+    #                 pass
+    #         except KeyError:
+    #             pass
 
-        """pull user info from the database based on session id"""
-
-        g.user = None
-
-        if 'user_id' in session:
-            from info.models import User
-            try:
-                try:
-                    g.user = User.query.get(session['user_id'])
-                except TypeError:  # session probably expired
-                    pass
-            except KeyError:
-                pass
     @app.after_request
     def after_request(response):
         from flask_wtf.csrf import generate_csrf
         csrf_token = generate_csrf()
         response.set_cookie('csrf_token', csrf_token)
         return response
+
+    #定义404
+    @app.errorhandler(404)
+    @user_login_data
+    def page_not_found(_):
+        user=g.user
+        data={'user_info':user.to_dict() if user else None}
+        return render_template('news/404.html',data=data)
 
     return app
 
