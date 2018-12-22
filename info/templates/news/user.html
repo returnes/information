@@ -1,0 +1,59 @@
+{% extends 'news/base.html' %}
+{% block title %}用户中心{% endblock %}
+{% block css %}{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='news/js/jquery.form.min.js') }}"></script>
+{% endblock %}
+{#<body>#}
+{#<div class="header_con">#}
+{#    <div class="header">#}
+{#        <a href="#" class="logo fl"><img src="/static/news/images/logo.png" alt="logo"></a>#}
+        {#			<div class="user_login fr" style="display: block;">#}
+        {#				<img src="../images/user_pic.png" class="lgin_pic">#}
+        {#				<a href="#">用户张山</a>#}
+        {#				<a href="#">退出</a>#}
+        {#			</div>#}
+{#        {% if data.user_info %}#}
+{#            <!-- 用户登录后显示下面，隐藏上面 -->#}
+{#            <div class="user_login fr" style="display: block;">#}
+{#                <img src="../../static/news/images/person01.png" class="lgin_pic">#}
+{#                <a href="{{ url_for('profile.get_user_info') }}">{{ data.user_info.nick_name }}</a>#}
+{#                <a href="{{ url_for('passport.logout',id=data.user_info.id) }}">退出</a>#}
+{#            </div>#}
+{#        {% else %}#}
+{#            <div class="user_btns fr">#}
+{#                <a href="javascript:;" class="login_btn">登录</a> / <a href="javascript:;" class="register_btn">注册</a>#}
+{#            </div>#}
+{#        {% endif %}#}
+{#    </div>#}
+{#</div>#}
+
+<div class="conter_con">
+    {% block content_con %}
+        <div class="user_menu_con fl">
+            <div class="user_center_pic">
+                <img src="../images/user_pic.png" alt="用户图片">
+            </div>
+            <div class="user_center_name">{{ data.user_info.nick_name }}</div>
+
+            <ul class="option_list">
+                <li class="active"><a href="{{ url_for('profile.get_user_info') }}" target="main_frame">基本资料</a></li>
+                <li><a href="{{ url_for('profile.pic_info') }}" target="main_frame">头像设置</a></li>
+                <li><a href="{{ url_for('profile.follow_info') }}" target="main_frame">我的关注</a></li>
+                <li><a href="{{ url_for('profile.pass_info') }}" target="main_frame">密码修改</a></li>
+                <li><a href="{{ url_for('profile.collection_info') }}" target="main_frame">我的收藏</a></li>
+                <li><a href="{{ url_for('profile.news_release_info') }}" target="main_frame">新闻发布</a></li>
+                <li><a href="{{ url_for('profile.news_list_info') }}" target="main_frame">新闻列表</a></li>
+            </ul>
+        </div>
+
+        <div class="user_con fr">
+            {% block user_con %}
+            <iframe src="user_base_info.html" frameborder="0" name="main_frame" class="main_frame"
+                    id="main_frame"></iframe>
+                {% endblock %}
+        </div>
+    {% endblock %}
+</div>
+{% block rank %}
+{% endblock %}

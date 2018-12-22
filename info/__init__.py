@@ -42,6 +42,9 @@ def creat_app(config_name='development'):
 
     from info.modules.news import news_blu
     app.register_blueprint(news_blu)
+    # 个人中心蓝图
+    from info.modules.profile import profile_bul
+    app.register_blueprint(profile_bul)
 
     # @app.before_request
     # def before_request():

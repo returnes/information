@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/jquery.pagination.css">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script type="text/javascript" src="../js/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.pagination.min.js"></script>
-    <script type="text/javascript" src="../js/user_follow.js"></script>
-</head>
+{% extends 'news/user.html' %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='news/css/jquery.pagination.css') }}">
+{% endblock %}
+{% block js %}
+	<script type="text/javascript" src="{{ url_for('static',filename='news/js/jquery.pagination.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='news/js/user_follow.js') }}"></script>
+{% endblock %}
+
 <body class="inframe_body">
+{% block user_con %}
         <h3 class="common_title">我的关注</h3>
         <ul class="card_list_con">
             <li class="author_card card_list">
@@ -64,5 +62,6 @@
                 });
             });
         </script>
+
+{% endblock %}
 </body>
-</html>

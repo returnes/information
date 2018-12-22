@@ -1,0 +1,37 @@
+{% extends "news/user.html" %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='news/css/jquery.pagination.css') }}">
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static',filename='news/js/jquery.pagination.min.js') }}"></script>
+{% endblock %}
+{% block user_con %}
+<body class="inframe_body">
+<div class="my_collect">
+    <h3>我的收藏</h3>
+    <ul class="article_list">
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+        <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+    </ul>
+
+
+    <div id="pagination" class="page"></div>
+    <script>
+        $(function () {
+            $("#pagination").pagination({
+                currentPage: 2,
+                totalPage: 3,
+                callback: function (current) {
+                    alert('ok!');
+                }
+            });
+        });
+    </script>
+
+</div>
+</body>
+{% endblock %}

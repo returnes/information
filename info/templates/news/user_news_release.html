@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script type="text/javascript" src="../js/jquery-1.12.4.min.js"></script>
-    <script src="../tinymce/js/tinymce/tinymce.min.js"></script>
-    <script src="../js/tinymce_setup.js"></script>
-    <script type="text/javascript" src="../js/user_news_release.js"></script>
-</head>
+{% extends "news/user.html" %}
+{% block js %}
+    <script src="{{ url_for('static',filename='news/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='news/js/tinymce_setup.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='news/js/user_news_release.js') }}"></script>
+{% endblock %}
+{% block user_con %}
 <body class="inframe_body">
     <form class="release_form">
         <h3>新闻发布</h3>
@@ -39,4 +34,4 @@
         })
     </script>
 </body>
-</html>
+{% endblock %}

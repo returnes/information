@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../css/reset.css">
-	<link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script type="text/javascript" src="../js/user_pic_info.js"></script>
-</head>
+{% extends 'news/user.html' %}
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/user_pic_info.js') }}"></script>
+{% endblock %}
 <body class="inframe_body">
+{% block user_con %}
     <form class="pic_info">
         <h3>头像设置</h3>
         <div class="form-group">
@@ -23,5 +19,5 @@
             <input type="submit" value="保 存" class="input_sub">
         </div>
     </form>
+{% endblock %}
 </body>
-</html>
