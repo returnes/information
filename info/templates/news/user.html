@@ -8,11 +8,11 @@
 {#<div class="header_con">#}
 {#    <div class="header">#}
 {#        <a href="#" class="logo fl"><img src="/static/news/images/logo.png" alt="logo"></a>#}
-        {#			<div class="user_login fr" style="display: block;">#}
-        {#				<img src="../images/user_pic.png" class="lgin_pic">#}
-        {#				<a href="#">用户张山</a>#}
-        {#				<a href="#">退出</a>#}
-        {#			</div>#}
+{#			<div class="user_login fr" style="display: block;">#}
+{#				<img src="../images/user_pic.png" class="lgin_pic">#}
+{#				<a href="#">用户张山</a>#}
+{#				<a href="#">退出</a>#}
+{#			</div>#}
 {#        {% if data.user_info %}#}
 {#            <!-- 用户登录后显示下面，隐藏上面 -->#}
 {#            <div class="user_login fr" style="display: block;">#}
@@ -31,9 +31,15 @@
 <div class="conter_con">
     {% block content_con %}
         <div class="user_menu_con fl">
+
             <div class="user_center_pic">
-                <img src="../images/user_pic.png" alt="用户图片">
+                <img src={% if data.user_info.avatar_url %}
+                    {{ data.user_info.avatar_url }}
+                {% else %}
+                    "../../static/news/images/user_pic.png"
+                {% endif %} alt="用户图片">
             </div>
+
             <div class="user_center_name">{{ data.user_info.nick_name }}</div>
 
             <ul class="option_list">
@@ -49,9 +55,9 @@
 
         <div class="user_con fr">
             {% block user_con %}
-            <iframe src="user_base_info.html" frameborder="0" name="main_frame" class="main_frame"
-                    id="main_frame"></iframe>
-                {% endblock %}
+                <iframe src="user_base_info.html" frameborder="0" name="main_frame" class="main_frame"
+                        id="main_frame"></iframe>
+            {% endblock %}
         </div>
     {% endblock %}
 </div>

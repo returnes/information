@@ -1,5 +1,7 @@
 {% extends "news/user.html" %}
 {% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='news/js/jquery-1.12.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='news/js/jquery.form.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='news/js/user_pass_info.js') }}"></script>
 {% endblock %}
 {% block user_con %}
@@ -8,15 +10,15 @@
         <h3>密码修改</h3>
         <div class="form-group">
             <label>当前密码：</label>
-            <input type="password" name="" class="input_txt">
+            <input type="password" name="old_password" class="input_txt old_pass">
         </div>
         <div class="form-group">
             <label>新密码：</label>
-            <input type="password" name="" class="input_txt">
+            <input type="password" name="new_password1" class="input_txt new_pass1">
         </div>
         <div class="form-group">
             <label>确认密码：</label>
-            <input type="password" name="" class="input_txt">
+            <input type="password" name="new_password2" class="input_txt new_pass2">
         </div>
         <div class="error_tip">提示信息</div>
         <div class="form-group">

@@ -55,8 +55,9 @@ def new_list():
     except Exception as e:
         page=1
         per_page=20
+
     # 3. 查询数据并分页
-    filters = []
+    filters = [News.status == 0]
     # 如果分类id不为1，那么添加分类id的过滤
     if cid != "1":
         filters.append(News.category_id == cid)

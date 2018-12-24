@@ -1,6 +1,6 @@
 # Author Caozy
 
-from info.models import News, Comment, CommentLike
+from info.models import News, Comment, CommentLike, User
 from info.response_code import RET
 from info.utils.common import user_login_data
 from . import news_blu
@@ -48,16 +48,32 @@ def news_detail(news_id):
             comment_dict['is_like']=True
         comment_list.append(comment_dict)
 
+    ##########################以下是 判断用户是否收藏##########################################
     is_collected = False
+    is_followed = False  # 都没有关注
     if g.user:
+        # user.collection_news
+        # [News,News,News,...]
         if news in g.user.collection_news:
             is_collected = True
+
+        try:
+            news_user = User.query.get(news.user_id)
+        except Exception as e:
+            return jsonify(errno=RET.DBERR, errmsg='查询失败')
+        # news_user 是发布新闻的作者
+        # user 是登陆的用户
+        #
+        if news_user in g.user.followers:
+            is_followed = True
+
     data = {
         'new_info': news.to_dict(),
         'clicks_news': clicks_news,
         "user_info": g.user.to_dict() if g.user else None,
         'comment_list': comment_list,
-        'is_collected': is_collected
+        'is_collected': is_collected,
+        'is_followed':is_followed
 
     }
     return render_template('news/detail.html', data=data)
@@ -179,5 +195,43 @@ def comment_like():
         db.session.rollback()
         return jsonify(errno=RET.DBERR, errmsg='数据库错误')
     return jsonify(errno=RET.OK, errmsg='成功')
+
+@news_blu.route('/followed_user', methods=["POST"])
+@user_login_data
+def followed_user():
+    if not g.user:
+        return jsonify(errno=RET.SESSIONERR,errmsg='请登录')
+    user_id=request.json.get('user_id')
+    action=request.json.get('action')
+    if not all([user_id,action]):
+        return jsonify(errno=RET.PARAMERR,errmsg='参数不全')
+    if action not in (['follow','unfollow']):
+        return jsonify(errno=RET.PARAMERR,errmsg='参数错误')
+    try:
+        taget_user=User.query.get(user_id)
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR,errmsg='数据库错误')
+    if not taget_user:
+        return jsonify(errno=RET.NODATA,errmsg='无数据')
+    if action=='follow':
+        if taget_user.followers.filter(User.id==g.user.id).count()>0:
+            return jsonify(errno=RET.DATAEXIST,errmsg='已经关注')
+        taget_user.followers.append(g.user)
+    else:
+        if taget_user.followers.filter(User.id==g.user.id).count()>0:
+            taget_user.followers.remove(g.user)
+
+    try:
+        db.session.commit()
+
+    except Exception as e:
+        current_app.logger.error(e)
+        return jsonify(errno=RET.DBERR, errmsg="数据保存错误")
+
+    return jsonify(errno=RET.OK, errmsg="操作成功")
+
+
+
 
 

@@ -58,7 +58,8 @@
                     {% endif %}
                     <div class="comment_time fl">{{ comment.create_time }}</div>
                     <a href="javascript:;" class="comment_up has_comment_up fr"
-                       data-commentid="{{ comment.id }}"data-newsid="{{ comment.news_id }}" data-likecount="{{ comment.like_count }}">
+                       data-commentid="{{ comment.id }}" data-newsid="{{ comment.news_id }}"
+                       data-likecount="{{ comment.like_count }}">
                         {% if comment.like_count>0 %}
                             {{ comment.like_count }}
                         {% else %}
@@ -81,12 +82,19 @@
 {% endblock %}
 {% block author_info %}
     <div class="author_card">
-        <a href="#" class="author_pic"><img src="../images/user_pic.png" alt="a_pic"></a>
-        <a href="#" class="author_name">张大山</a>
-        <div class="author_resume">张大山的简介,张大山</div>
-        <div class="writings"><span>总篇数</span><b>23</b></div>
-        <div class="follows"><span>粉丝</span><b>36</b></div>
-        <a href="javascript:;" class="focus fr">关注</a>
-        <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
+        <a href="#" class="author_pic"><img src={% if data.new_info.author.avatar_url %}
+            {{ data.new_info.author.avatar_url }}
+        {% else %}
+            "../../static/news/images/user_pic.png"
+        {% endif %} alt="a_pic"></a>
+        <a href="#" class="author_name">{{ data.new_info.author.nick_name }}</a>
+        <div class="author_resume">{{ data.new_info.author.signature }}</div>
+        <div class="writings"><span>总篇数</span><b>{{ data.new_info.author.news_count }}</b></div>
+        <div class="follows"><span>粉丝</span><b>{{ data.new_info.author.followers_count }}</b></div>
+        <a href="javascript:;" class="focus fr" data-userid="{{ data.new_info.author.id }}"
+           style="display: {% if data.is_followed %}none{% else %}block{% endif %}">关注</a>
+        <a href="javascript:;" class="focused fr" data-userid="{{ data.new_info.author.id }}"
+           style="display: {% if data.is_followed %}block{% else %}none{% endif %}"><span class="out">已关注</span><span
+                class="over">取消关注</span></a>
     </div>
 {% endblock %}
