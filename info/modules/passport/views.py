@@ -155,6 +155,7 @@ def logout(id=None):
         session['user_id']=''
         session['mobile']=''
         session['nick_name']=''
+        session['is_admin']=False
         # session.pop('user_id', None)
         # session.pop('nick_name', None)
         # session.pop('mobile', None)

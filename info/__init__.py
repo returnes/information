@@ -46,6 +46,10 @@ def creat_app(config_name='development'):
     from info.modules.profile import profile_bul
     app.register_blueprint(profile_bul)
 
+    # 维修中心蓝图
+    from info.modules.admin import admin_blu
+    app.register_blueprint(admin_blu)
+
     # @app.before_request
     # def before_request():
     #
