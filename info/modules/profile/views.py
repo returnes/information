@@ -227,7 +227,7 @@ def news_release_info():
     news.index_image_url=constants.QINIU_DOMIN_PREFIX+path
     news.content=content
     news.user_id=user.id
-    news.status=0# 0通过/1审核中/-1未用过
+    news.status=1# 0通过/1审核中/-1未用过
 
     try:
         db.session.add(news)

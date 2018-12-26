@@ -14,5 +14,4 @@ def before_request():
             # 判断当前是否有用户登录，或者是否是管理员，如果不是，直接重定向到项目主页
             return redirect('/admin/login')
 
-
 from . import views
