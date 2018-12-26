@@ -43,13 +43,14 @@
             <div class="user_center_name">{{ data.user_info.nick_name }}</div>
 
             <ul class="option_list">
-                <li class="active"><a href="{{ url_for('profile.get_user_info') }}" target="main_frame">基本资料</a></li>
-                <li><a href="{{ url_for('profile.pic_info') }}" target="main_frame">头像设置</a></li>
-                <li><a href="{{ url_for('profile.follow_info') }}" target="main_frame">我的关注</a></li>
-                <li><a href="{{ url_for('profile.pass_info') }}" target="main_frame">密码修改</a></li>
-                <li><a href="{{ url_for('profile.collection_info') }}" target="main_frame">我的收藏</a></li>
-                <li><a href="{{ url_for('profile.news_release_info') }}" target="main_frame">新闻发布</a></li>
-                <li><a href="{{ url_for('profile.news_list_info') }}" target="main_frame">新闻列表</a></li>
+
+                <li class="active"><a href="{{ url_for('profile.get_user_info') }}" >基本资料</a></li>
+                <li><a href="{{ url_for('profile.pic_info') }}">头像设置</a></li>
+                <li><a href="{{ url_for('profile.follow_info') }}">我的关注</a></li>
+                <li><a href="{{ url_for('profile.pass_info') }}">密码修改</a></li>
+                <li><a href="{{ url_for('profile.collection_info') }}">我的收藏</a></li>
+                <li><a href="{{ url_for('profile.news_release_info') }}">新闻发布</a></li>
+                <li><a href="{{ url_for('profile.news_list_info') }}">新闻列表</a></li>
             </ul>
         </div>
 
